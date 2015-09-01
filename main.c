@@ -93,6 +93,23 @@ int main(int argc, char *argv[]) {
         avg = elapsed/loop;
     #endif
 
+    #if 1
+        printf("\n\n\n[Version 4] : NEON\n");
+        system("./flush_cache.sh");
+        generateRGBTable();
+        elapsed = 0;
+        avg = 0;
+        for(i = 0; i < loop; i++){
+            clock_gettime(CLOCK_MONOTONIC, &t_start);
+            rgbaToBw_v4(bmp->data, bmp->width, bmp->height, stride);
+            clock_gettime(CLOCK_MONOTONIC, &t_end);
+            start = ((uint64_t)(t_start.tv_sec) * 1000000000LL + t_start.tv_nsec);
+            end = (uint64_t)(t_end.tv_sec) * 1000000000LL + t_end.tv_nsec;
+            elapsed += (end-start);
+        }
+        avg = elapsed/loop;
+    #endif
+
     printf("Execution time of rgbaToBw() : %" PRIu64 " \n", avg);
     bmpSave(bmp, savefile);
 
